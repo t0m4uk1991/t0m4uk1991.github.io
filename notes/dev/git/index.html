@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="keywords" content="blog,it">
+    <link rel="stylesheet" href="/assets/css/application.css">
+    <link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.6.3/font-awesome.min.css" integrity="sha384-Wrgq82RsEean5tP3NK3zWAemiNEXofJsTwTyHmNb/iL3dP/sZJ4+7sOld1uqYJtE" crossorigin="anonymous">
+    <link rel="icon" type="img/ico" href="/favicon.ico">
+    <script src="/assets/js/particles.js"></script>
+    <title>t0m4uk1991</title>
+</head>
+<body>
+    <div id="particlesjs"></div>
+    <a href="/notes">Back</a>
+<article>
+    <h2></h2>
+    <p class="disabled"></p>
+    <h1 id="git">git</h1>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git checkout <span class="nb">hash </span>fname1 fname2    <span class="c">#checkout specific files from specific commit</span>
+git diff stash                     <span class="c">#compare directory with stash</span>
+git stash --keep-index             <span class="c">#stash all except files added to index</span>
+                                   <span class="c">#move branch to new repo</span>
+git push url://path/to/new/repository.git branch-to-move
+                                   <span class="c">#allow empty commit</span>
+git commit --allow-empty -m <span class="s2">"Initial commit"</span>
+git clone . /destination/folder    <span class="c">#clone current dir to another dir</span>
+
+git bundle create fname HEAD       <span class="c">#create bundle from commit</span>
+git pull fname                     <span class="c">#apply bundle to repo</span>
+git apply &lt; patch_file             <span class="c">#apply patch</span>
+git <span class="k">for</span>-each-ref --sort<span class="o">=</span>taggerdate --format <span class="s1">'%(refname) %(taggerdate)'</span> refs/tags</code></pre></figure>
+
+</article>
+
+    <script>
+        
+
+        particlesJS.load("particlesjs", "/assets/conf/particlesjs-config.json");
+    </script>
+</body>
