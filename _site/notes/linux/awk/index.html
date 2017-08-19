@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="keywords" content="blog,it">
+    <link rel="stylesheet" href="/assets/css/application.css">
+    <link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.6.3/font-awesome.min.css" integrity="sha384-Wrgq82RsEean5tP3NK3zWAemiNEXofJsTwTyHmNb/iL3dP/sZJ4+7sOld1uqYJtE" crossorigin="anonymous">
+    <link rel="icon" type="img/ico" href="/favicon.ico">
+    <script src="/assets/js/particles.js"></script>
+    <title>t0m4uk1991</title>
+</head>
+<body>
+    <div id="particlesjs"></div>
+    <a href="/notes">Back</a>
+<article>
+    <h2></h2>
+    <p class="disabled"></p>
+    <h1 id="awk">awk</h1>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">                            <span class="c">#Standart awk usage:</span>
+awk <span class="s1">'{ print $0}'</span> filename  <span class="c">#$0 all record, $1 first field of the record, etc</span>
+awk <span class="s1">'{print NF}'</span>            <span class="c">#filename, NF - number of fields</span>
+
+                            <span class="c">#conditions</span>
+awk <span class="s1">'NF==2 { print $1}'</span> filename
+
+                            <span class="c">#awk and regexp</span>
+awk <span class="s1">'/REGEXP/{ print $0}'</span>
+awk <span class="s1">'/REGEXP1/{ print $0} /REGEXP2/{ print $0}'</span>
+
+                            <span class="c">#delimiters in awk</span>
+awk -F , <span class="s1">'{ print $0}'</span>
+awk -F <span class="s1">'[,!]'</span> <span class="s1">'{print $0}'</span>
+
+                            <span class="c">#record separator(RS) and</span>
+                            <span class="c">#field separator (FS)</span>
+awk <span class="s1">'BEGIN{RS="!";FS=","} {print $1}'</span>
+
+                            <span class="c">#Output Record Separator(ORS) and</span>
+                            <span class="c">#Output Field Separator(OFS)</span>
+awk <span class="s1">'BEGIN{ORS="\n";OFS="\t";FS=","} {print $1, $2, $3}'</span>
+
+                            <span class="c">#execute awk program from file</span>
+awk -f program-filename.awk data-filename
+
+                            <span class="c">#example of awk program:</span>
+BEGIN<span class="o">{</span>
+    print <span class="s2">"begin"</span>
+<span class="o">}</span>
+<span class="o">{</span>
+    print <span class="s2">"some "</span>, <span class="nv">$0</span>, <span class="s2">" text"</span>
+<span class="o">}</span>               
+END<span class="o">{</span>
+    print <span class="s2">"end"</span>
+<span class="o">}</span>
+
+                            <span class="c">#Examples</span>
+
+                            <span class="c">#select all records where first field</span>
+                            <span class="c">#starts with capital letter "U"</span>
+awk <span class="s1">'$1 ~ /U/{print $0}'</span> filename
+
+                            <span class="c">#ifelse  clause</span>
+awk <span class="s1">'{ if (NF&gt;4){print "There are more then 10 entries", $0}
+       else { print "There less then 10 entries", $0}}'</span> filename</code></pre></figure>
+
+
+</article>
+
+    <script>
+        
+
+        particlesJS.load("particlesjs", "/assets/conf/particlesjs-config.json");
+    </script>
+</body>
