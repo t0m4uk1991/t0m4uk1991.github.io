@@ -5,22 +5,112 @@
     <meta name="viewport"content="width=device-width, initial-scale=1">
     <meta name="keywords" content="it,cv,notes">
     <link rel="stylesheet" href="/assets/css/application.css">
-    <link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.6.3/font-awesome.min.css" integrity="sha384-Wrgq82RsEean5tP3NK3zWAemiNEXofJsTwTyHmNb/iL3dP/sZJ4+7sOld1uqYJtE" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/fontawesome/css/all.css">
     <link rel="icon" type="img/ico" href="/favicon.ico">
     <script src="/assets/js/particles.js"></script>
     <title>t0m4uk1991</title>
 </head>
 <body>
     <div id="particlesjs"></div>
-    <article>
+    <a href="/notes">Back</a>
+<article>
     <h2></h2>
-    <h1 id="docker">docker</h1>
+    <p class="disabled"></p>
+    <h1 id="dommon-commands">Dommon commands</h1>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker build -t tag_name .
-docker run tag_name
-docker run -t -i tag_name /bin/bash
-docker build -t tag_name -f docker_file .
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker run image:latest       <span class="c"># run docker image</span>
+
+docker run -ti image_name /bin/bash <span class="se">\</span>
+            -c <span class="s2">"sleep 3; echo all done"</span> <span class="se">\</span>
+            --memory maximum-allowed-memory
+            --cpu-shares number
+            --cpu-quota number
+            -p 8080:8081
+            --mount <span class="nb">type</span><span class="o">=</span><span class="nb">bind</span>,sourse<span class="o">=</span>&lt;path&gt;,target<span class="o">=</span>&lt;location <span class="k">in </span>container&gt;
+                              <span class="c"># ti == terminal interactive</span>
+                              <span class="c"># c command</span>
+                              <span class="c"># cpu-shares relative</span>
+                              <span class="c"># cpu-quota general limit</span>
+                              <span class="c"># -p local:remote expose port</span>
+
+
+
+docker port &lt;container_name&gt;  <span class="c"># list exposed ports                             </span>
+
+docker ps                     <span class="c"># list containers  </span>
+docker attach &lt;image_name&gt;    <span class="c"># connect to running container</span>
+                              <span class="c"># detach Ctrl-p Ctrl-q</span>
+
+docker <span class="nb">exec</span>                   <span class="c"># start new process on ranning container</span>
+
+docker logs container_name        
+
+docker <span class="nb">kill</span> &lt;container_name&gt;        
+docker rm &lt;container_name&gt;        
+
+docker commit &lt;image_id&gt;      <span class="c"># save changes to new image</span>
+docker tag &lt;<span class="nb">hash</span>&gt;
+
 docker run --net<span class="o">=</span><span class="s2">"host"</span> had</code></pre></figure>
+
+<h1 id="dockerfile-example">Dockerfile example</h1>
+
+<figure class="highlight"><pre><code class="language-dockerfile" data-lang="dockerfile">FROM node:10.0.0
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+COPY package.json /usr/src/app/package.json
+RUN npm install
+CMD npm start</code></pre></figure>
+
+<p>.dockerignore</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker build -t image_name .  <span class="c"># build from Dockerfile</span>
+docker build -t image_name <span class="se">\</span>
+             -f docker_file . <span class="c"># specify filename</span>
+
+docker login --username<span class="o">=</span>&lt;username&gt;
+docker images   <span class="c"># list all images      </span>
+docker tag &lt;image_id&gt; repo_name      
+docker push repo_name</code></pre></figure>
+
+<h1 id="docker-compose-file">Docker compose file</h1>
+
+<figure class="highlight"><pre><code class="language-yml" data-lang="yml"><span class="s">version</span><span class="pi">:</span> <span class="s1">'</span><span class="s">3.5'</span>
+<span class="s">services</span><span class="pi">:</span>
+  <span class="s">mongo</span><span class="pi">:</span>
+    <span class="s">container_name</span><span class="pi">:</span> <span class="s">mongo</span>
+    <span class="s">image</span><span class="pi">:</span> <span class="s">mongo</span>
+    <span class="s">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">27017:27017"</span>
+  <span class="s">server</span><span class="pi">:</span>
+    <span class="s">container_name</span><span class="pi">:</span> <span class="s">server</span>
+    <span class="s">build</span><span class="pi">:</span> <span class="s">./backend</span>
+    <span class="s">command</span><span class="pi">:</span> <span class="s">npm start</span>
+    <span class="s">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./server/:/usr/server</span>
+    <span class="s">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">4000:4000"</span>
+    <span class="s">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">mongo</span> 
+  <span class="s">client</span><span class="pi">:</span>
+    <span class="s">container_name</span><span class="pi">:</span> <span class="s">client</span>
+    <span class="s">build</span><span class="pi">:</span> <span class="s">./frontend</span>
+    <span class="s">command</span><span class="pi">:</span> <span class="s">npm start</span>
+    <span class="s">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./client/:/usr/client</span>
+    <span class="s">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s1">'</span><span class="s">3000:3000'</span>
+    <span class="s">environment</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">NODE_ENV=development</span>
+    <span class="s">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">server</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker-compose up -d --build  <span class="c"># Builds, (re)creates, starts, </span>
+                              <span class="c">#  and attaches to containers for a service.</span>
+                              
+docker-compose stop           <span class="c"># Stops running containers without removing them</span></code></pre></figure>
+
 
 </article>
 

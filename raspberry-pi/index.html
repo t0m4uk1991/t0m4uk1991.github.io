@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="it,cv,notes">
+    <link rel="stylesheet" href="/assets/css/application.css">
+    <link rel="stylesheet" href="/assets/fontawesome/css/all.css">
+    <link rel="icon" type="img/ico" href="/favicon.ico">
+    <script src="/assets/js/particles.js"></script>
+    <title>t0m4uk1991</title>
+</head>
+<body>
+    <div id="particlesjs"></div>
+    <a href="/home">Back</a>
+<article>
+    <h2>Raspberry Pi</h2>
+    <p class="disabled">02-08-2018</p>
+    <p>Few day ago I get my RaspberryPi, so I decide to write some setup instrucions
+to share my knowladge and make some notes for my own</p>
+
+<p>So, step by step</p>
+
+<h3 id="distro">Distro</h3>
+
+<p>I select RASPBIAN STRETCH LITE distro. I connect to RPi computer over ssh,
+so I dont need any GUI. You can get RASPBIAN STRETCH LITE distro 
+<a href="https://www.raspberrypi.org/downloads/raspbian/">here</a></p>
+
+<p><a href="https://www.raspberrypi.org/documentation/installation/installing-images/linux.md">Here</a> 
+you can also checkout some documentatoin and instalation guides:</p>
+
+<h3 id="install">Install</h3>
+
+<p>You need sd card to install OS. When card is connected to computer you should
+identify it. To list all drives please execute:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">ls -l /dev/disk/by-id/</code></pre></figure>
+
+<p>You should get something like:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">lrwxrwxrwx 1 root root 13 Aug  2 21:07 mmc-SA16G_0x276a14a9 -&gt; ../../mmcblk0
+lrwxrwxrwx 1 root root 15 Aug  2 21:07 mmc-SA16G_0x276a14a9-part1 -&gt; ../../mmcblk0p1
+lrwxrwxrwx 1 root root 15 Aug  2 21:07 mmc-SA16G_0x276a14a9-part2 -&gt; ../../mmcblk0p2</code></pre></figure>
+
+<p>sd card usually have mmc prefix, in my case sd card have name /dev/mmcblk0 
+(recommended to format card before write new distro to SD card)</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo dd <span class="nv">bs</span><span class="o">=</span>4M <span class="k">if</span><span class="o">=</span>2018-06-27-raspbian-stretch-lite.img <span class="nv">of</span><span class="o">=</span>/dev/mmcblk0 <span class="nv">conv</span><span class="o">=</span>fsync</code></pre></figure>
+
+<p>Operation finished? you can go to the next step</p>
+
+<p>Also to connect to RP I need ssh and in this place we need a bit of magic,
+to run ssh demon on startup we shoud create an empty file, it should be named ssh 
+(empty file without extension). Save that empty file and dump it into boot partition (microSD)</p>
+
+<p>Note: I use Ehternet cable to connect RP to my local network, if you want
+to use WIFI insted of ETh, you need another one trick</p>
+
+<p>You should create file nameed wpa_supplicant.conf . This time you need to 
+write a few lines of text for this file. For this file, you need to use the FULL VERSION of wpa_supplicant.conf.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">country</span><span class="o">=</span>US
+<span class="nv">ctrl_interface</span><span class="o">=</span><span class="nv">DIR</span><span class="o">=</span>/var/run/wpa_supplicant <span class="nv">GROUP</span><span class="o">=</span>netdev
+<span class="nv">update_config</span><span class="o">=</span>1
+
+<span class="nv">network</span><span class="o">={</span>
+    <span class="nv">ssid</span><span class="o">=</span><span class="s2">"your_real_wifi_ssid"</span>
+    <span class="nv">scan_ssid</span><span class="o">=</span>1
+    <span class="nv">psk</span><span class="o">=</span><span class="s2">"your_real_password"</span>
+    <span class="nv">key_mgmt</span><span class="o">=</span>WPA-PSK
+<span class="o">}</span></code></pre></figure>
+
+<h3 id="network">Network</h3>
+
+<p>Ok. OS is on sd card, sd card is connected to RPi board, energy supply is also conneced 
+(you should see red diode), patchcord connect you board to router. What next host connect to device?
+Hm… We should find Pi in our network. THe ligthweigth way: I can get list of 
+connected devices on my router admin page. But it’s too ligth, more old school solutions:
+* scan all home network with nmap (took some time if you have lot of “smart things” in you network)
+* arp -na | grep -i b8:27:eb (mack adress on RPi usually starty by b8:27:eb)</p>
+
+<p>So after this manipulation we successfully get RPi ip. Now try to connect
+(note: default credentials in raspbian is pi/raspberry):</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">ssh pi@&lt;rpi_ip&gt;</code></pre></figure>
+
+<p>Password? ok. Lets login change password (please use passwd command). Enter
+password each time you login, I’m too lazy to it,let put public key on the server</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">ssh-copy-id -i ~/.ssh/id_rsa.pub pi@192.168.1.190</code></pre></figure>
+
+<p>Also I have ability to create make my RPi ip adress static, so I will 
+always have the same ip. Now I will add new alias</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">alias </span><span class="nv">berloga</span><span class="o">=</span><span class="s1">'ssh pi@192.168.1.190'</span></code></pre></figure>
+
+<h1 id="customization">Customization</h1>
+
+<p>After login I want a bit customize system.
+* Update ssh login message (edit /etc/motd). You can generate ASCII text
+here http://ascii.co.uk/text</p>
+
+<h1 id="next-steps">Next Steps</h1>
+
+<p>https://www.raspberrypi.org/forums/viewtopic.php?t=191252</p>
+
+<p>Please take a look at <a href=""></a>
+or jump right into <a href="">Usage</a> if you’d like.</p>
+
+</article>
+
+    <script>
+        
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-57509521-1', 'auto');
+            ga('send', 'pageview');
+        
+        particlesJS.load("particlesjs", "/assets/conf/particlesjs-config.json");
+    </script>
+</body>

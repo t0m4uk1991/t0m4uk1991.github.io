@@ -5,7 +5,7 @@
     <meta name="viewport"content="width=device-width, initial-scale=1">
     <meta name="keywords" content="it,cv,notes">
     <link rel="stylesheet" href="/assets/css/application.css">
-    <link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.6.3/font-awesome.min.css" integrity="sha384-Wrgq82RsEean5tP3NK3zWAemiNEXofJsTwTyHmNb/iL3dP/sZJ4+7sOld1uqYJtE" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/fontawesome/css/all.css">
     <link rel="icon" type="img/ico" href="/favicon.ico">
     <script src="/assets/js/particles.js"></script>
     <title>t0m4uk1991</title>
@@ -18,18 +18,29 @@
     <p class="disabled"></p>
     <h1 id="networking">networking</h1>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#network</span>
-sudo netstat -tlpn         <span class="c">#get info about ports and connected demons PIDs</span>
-                           <span class="c">#port forwarding</span>
-ssh -L &lt;<span class="nb">local </span>port&gt;:&lt;remote computer&gt;:&lt;remote port&gt; &lt;user&gt;@&lt;remote ip&gt;
-ssh user@host &lt;<span class="nb">command</span>&gt;    <span class="c">#execute command on remote host</span>
-scp username@server:/path/to/file /local/path <span class="c">#copy file from remote to local</span>
-scp /local/path username@server:/path/to/file <span class="c">#copy file from local to remote</span>
-nslookup or dig            <span class="c">#to get DNS data</span>
-sudo netstat -tlpn         <span class="c">#get PIDs and related open ports</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># network</span>
+sudo netstat -tlpn         <span class="c"># get info about ports and connected demons PIDs</span>
+                           
+ssh -L &lt;local_port&gt;:&lt;remote_computer&gt;:&lt;remote_port&gt; <span class="se">\</span>
+        &lt;user&gt;@&lt;remote ip&gt; <span class="c"># port forwarding</span>
 
-<span class="c">#generate ssh keys</span>
-1<span class="o">)</span> ssh-keygen -t rsa -b 4096 -C <span class="s2">"your_email@example.com"</span>  <span class="c">#genearate key</span>
+ssh user@host &lt;<span class="nb">command</span>&gt;    <span class="c"># execute command on remote host</span>
+scp <span class="se">\</span>
+    username@server:/path/to/file <span class="se">\</span>
+    /local/path            <span class="c"># copy file from remote to local</span>
+
+scp <span class="se">\</span>
+    /local/path 
+    username@server:/path/to/file 
+                           <span class="c"># copy file from local to remote</span>
+
+nslookup / dig             <span class="c"># to get DNS data</span>
+sudo netstat -tlpn         <span class="c"># get PIDs and related open ports</span>
+
+<span class="c"># generate ssh keys</span>
+1<span class="o">)</span> ssh-keygen -t rsa <span class="se">\</span>
+              -b 4096 <span class="se">\</span>
+              -C <span class="s2">"your_email@example.com"</span>      <span class="c">#genearate key</span>
 2<span class="o">)</span> <span class="nb">eval</span> <span class="s2">"</span><span class="k">$(</span>ssh-agent -s<span class="k">)</span><span class="s2">"</span>                      <span class="c">#start ssh agent</span>
 3<span class="o">)</span> ssh-add ~/.ssh/id_rsa                       <span class="c">#add key to ssh agent</span>
 4<span class="o">)</span> xclip -sel clip &lt; ~/.ssh/id_rsa.pub         <span class="c">#copy of public key to clipboard</span></code></pre></figure>
