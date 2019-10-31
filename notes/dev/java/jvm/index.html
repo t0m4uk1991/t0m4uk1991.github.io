@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="it,cv,notes">
+    <link rel="stylesheet" href="/assets/css/application.css">
+    <link rel="stylesheet" href="/assets/fontawesome/css/all.css">
+    <link rel="icon" type="img/ico" href="/favicon.ico">
+    <script src="/assets/js/particles.js"></script>
+    <title>t0m4uk1991</title>
+</head>
+<body>
+    <div id="particlesjs"></div>
+    <a href="/notes">Back</a>
+<article>
+    <h2></h2>
+    <p class="disabled"></p>
+    <h1 id="jvm">jvm</h1>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">-server       <span class="c">#Turns Java VM features specific to server applications, such</span>
+              <span class="c">#as sofisticated JIT compiler. Though this option is implicitely</span>
+              <span class="c">#enabled for x64 virtual machines, it still makes sence to use it</span>
+              <span class="c">#as according to documentation behaviour maybe changed in the future.</span>
+
+-Xms&lt;heap size&gt;[g|m|k] -Xmx&lt;heap size&gt;[g|m|k]
+              <span class="c">#To avoid dynamic heap resizing and lags, which could be caused by</span>
+              <span class="c">#this,we explicitely specify minimal and maximal heap size. Thus</span>
+              <span class="c">#Java VM will spend time only once to commit on all the heap.</span>
+
+-XX:PermSize<span class="o">=</span>&lt;perm gen size&gt;[g|m|k] -XX:MaxPermSize<span class="o">=</span>&lt;perm gen size&gt;[g|m|k]
+              <span class="c">#Logic for permanent generation is the same as for overall heap —</span>
+              <span class="c">#predefine sizing to avoid costs of dynamic changes. Not applicable</span>
+              <span class="c">#to Java &gt;= 8.</span>
+
+-XX:MaxMetaspaceSize<span class="o">=</span>&lt;metaspace size&gt;[g|m|k]
+              <span class="c">#By default Metaspace in Java VM 8 is not limited, though for the</span>
+              <span class="c">#sake of system stability it makes sense to limit it with some</span>
+              <span class="c">#finite value.</span>
+
+-Xmn&lt;young size&gt;[g|m|k]
+              <span class="c">#Explicitely define size of the young generation.</span>
+
+-XX:SurvivorRatio<span class="o">=</span>&lt;ratio&gt;
+              <span class="c">#Ratio which determines size of the survivour space relatively to</span>
+              <span class="c">#eden size.</span>
+
+-XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled
+              <span class="c">#As response time is critical for server application concurrent</span>
+              <span class="c">#collector feets best for Web applications. Unfortunatelly G1</span>
+              <span class="c">#is still not production ready, thus we have to use Concurrent</span>
+              <span class="c">#Mark-Sweep collector.</span>
+
+-XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction<span class="o">=</span>&lt;percent&gt;
+              <span class="c">#By default CMS GC uses set of heuristic rules to trigger garbage</span>
+              <span class="c">#collection. This makes GC less predictable and usually tends to</span>
+              <span class="c">#delay collection until old generation is almost occupied.</span>
+              <span class="c">#Initiating it in advance allows to complete collection before old</span>
+              <span class="c">#generation is full and thus avoid Full GC (i.e. stop-the-world pause).</span>
+              <span class="c">#-XX:+UseCMSInitiatingOccupancyOnly prevent usage of GC heuristics.</span>
+              <span class="c">#-XX:CMSInitiatingOccupancyFraction informs Java VM when CMS should</span>
+              <span class="c">#be triggered. Basically, it allows to create a buffer in heap,</span>
+              <span class="c">#which can be filled with data, while CMS is working. Thus percent</span>
+              <span class="c">#should be back calculated from the speed in which memory is consumed</span>
+              <span class="c">#in old generation during production load. Such percent should be</span>
+              <span class="c">#chosen carefully, if it will be small — CMS will work to often,</span>
+              <span class="c">#if it will be to big — CMS will be triggered too late and concurrent</span>
+              <span class="c">#mode failure may occur. Usually -XX:CMSInitiatingOccupancyFraction</span>
+              <span class="c">#should be at the level 70, which mean that application should</span>
+              <span class="c">#utilize less that 70% of old generation.</span>
+
+-XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBeforeRemark
+              <span class="c">#Instructs garbage collector to collect young generation before doing</span>
+              <span class="c">#Full GC or CMS remark phase and as a result improvde their</span>
+              <span class="c">#performance due to absence of need to check references between</span>
+              <span class="c">#young generation and tenured.</span></code></pre></figure>
+
+<p>lot of fun with JVM options also avaliable <a href="http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html">here</a>,<a href="http://www.oracle.com/technetwork/java/javase/gc-tuning-6-140523.html">here</a> and <a href="http://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/index.html">here</a></p>
+
+<p>http://blog.sokolenko.me/2014/11/javavm-options-production.html
+http://www.java67.com/2016/08/10-jvm-options-for-java-production-application.html
+http://www.maknesium.de/21-most-important-java-8-vm-options-for-servers
+https://zeroturnaround.com/rebellabs/jvm-options-cheat-sheet/
+https://apacheignite.readme.io/v1.9/docs/jvm-and-system-tuning
+https://github.com/FoxxMD/intellij-jvm-options-explained</p>
+
+</article>
+
+    <script>
+        
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-57509521-1', 'auto');
+            ga('send', 'pageview');
+        
+        particlesJS.load("particlesjs", "/assets/conf/particlesjs-config.json");
+    </script>
+</body>
